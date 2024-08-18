@@ -1,7 +1,7 @@
-import './App.css'
+import ExampleCarousel from "./ExampleCarousel.tsx";
 
 function App() {
-    return null
+    return <ExampleCarousel/>;
 }
 
-export default App
+export default App;

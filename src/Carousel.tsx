@@ -1,11 +1,11 @@
 import CarouselSlide from "./CarouselSlide.tsx";
 import CarouselButton from "./CarouselButton.tsx";
-import {useState} from "react";
+import {ReactNode, useState} from "react";
 
 type Slide = {
     imgUrl?: string,
-    description?: string,
-    attribution?: string,
+    description?: ReactNode,
+    attribution?: ReactNode,
 };
 
 const Carousel = ({slides}: { slides?: Slide[] }) => {
