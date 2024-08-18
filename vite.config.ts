@@ -7,5 +7,7 @@ export default defineConfig({
     // @ts-expect-error test is missing from the type definition
     test: {
         globals: true,
+        environment: 'happy-dom',
+        setupFiles: ['test-setup.ts'],
     },
 })
