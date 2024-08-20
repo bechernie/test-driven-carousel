@@ -10,15 +10,16 @@ type Slide = {
 
 export type CarouselProps = {
     slides?: Slide[],
+    DefaultImgComponent?: CarouselSlideProps["ImgComponent"],
     defaultImgHeight?: CarouselSlideProps["imgHeight"],
 };
 
-const Carousel = ({slides, defaultImgHeight}: CarouselProps) => {
+const Carousel = ({slides, DefaultImgComponent, defaultImgHeight}: CarouselProps) => {
     const [slideIndex, setSlideIndex] = useState(0);
 
     return (
         <div data-testid={'carousel'}>
-            <CarouselSlide imgHeight={defaultImgHeight} {...slides?.[slideIndex]}/>
+            <CarouselSlide ImgComponent={DefaultImgComponent} imgHeight={defaultImgHeight} {...slides?.[slideIndex]}/>
             <CarouselButton data-testid={'previous-button'}
                             onClick={() => {
                                 if (!slides) {
