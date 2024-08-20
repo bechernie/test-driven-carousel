@@ -44,19 +44,12 @@ describe('CarouselSlide', () => {
         expect(figure).toHaveAttribute('data-test-name', 'My slide');
     });
 
-    it('should have the expected static styles', () => {
-        render(<CarouselSlide/>);
-        const img = screen.getByRole("img");
-        expect(img).toHaveStyleRule("object-fit", "cover");
-        expect(img).toHaveStyleRule("width", "100%");
-    });
-
     it('should use `imgHeight` as the height of the <img>', () => {
         render(<CarouselSlide imgHeight={"123px"}/>);
         expect(screen.getByRole("img")).toHaveStyleRule("height", "123px");
     });
 
-    it('should allow styles to be overriden with `ImgComponent`', () => {
+    it('should allow styles to be overridden with `ImgComponent`', () => {
         const TestImg = styled(ScaledImg)`
             width: auto;
             object-fit: fill;
@@ -66,5 +59,10 @@ describe('CarouselSlide', () => {
         expect(img).toHaveStyleRule("width", "auto");
         expect(img).toHaveStyleRule("height", "250px");
         expect(img).toHaveStyleRule("object-fit", "fill");
+    });
+
+    it('should match snapshot', () => {
+        render(<CarouselSlide/>);
+        expect(screen.getByRole("figure")).toMatchSnapshot();
     });
 });
