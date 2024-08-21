@@ -1,30 +1,31 @@
 import {render, screen} from "@testing-library/react";
 import Carousel from "./Carousel.tsx";
 import {userEvent} from "@testing-library/user-event";
+import {beforeEach} from "vitest";
+
+const slides = [
+    {
+        imgUrl: 'https://example.com/slide1.png',
+        description: 'Slide 1',
+        attribution: 'Uno Pizzeria',
+    },
+    {
+        imgUrl: 'https://example.com/slide2.png',
+        description: 'Slide 2',
+        attribution: 'Dos Equis',
+    },
+    {
+        imgUrl: 'https://example.com/slide3.png',
+        description: 'Slide 3',
+        attribution: 'Three Amigos',
+    }
+];
 
 describe('Carousel', () => {
     it('should render a <div>', () => {
         render(<Carousel/>);
         expect(screen.getByTestId('carousel')).toBeInTheDocument();
     });
-
-    const slides = [
-        {
-            imgUrl: 'https://example.com/slide1.png',
-            description: 'Slide 1',
-            attribution: 'Uno Pizzeria',
-        },
-        {
-            imgUrl: 'https://example.com/slide2.png',
-            description: 'Slide 2',
-            attribution: 'Dos Equis',
-        },
-        {
-            imgUrl: 'https://example.com/slide3.png',
-            description: 'Slide 3',
-            attribution: 'Three Amigos',
-        }
-    ];
 
     it('should render the first slide by default', () => {
         render(<Carousel slides={slides}/>);
@@ -71,5 +72,46 @@ describe('Carousel', () => {
         render(<Carousel slides={slides} defaultImgHeight={defaultImgHeight}/>);
         const img = screen.getByRole("img");
         expect(img).toHaveStyleRule("height", "123px");
+    });
+});
+
+describe('with controlled slideIndex', () => {
+    const onSlideIndexChange = vi.fn();
+    const renderCarouselWithSlideIndex = () => {
+        render(<Carousel slides={slides} slideIndex={1} onSlideIndexChange={onSlideIndexChange}/>);
+    };
+
+    beforeEach(() => {
+        onSlideIndexChange.mockReset();
+    });
+
+    it('should show the slide corresponding to the slideIndex', () => {
+        renderCarouselWithSlideIndex();
+        const img = screen.getByRole("img");
+        expect(img).toHaveAttribute("src", slides[1].imgUrl);
+    });
+
+    it('should call onSlideIndexChange when previous <button> is clicked', async () => {
+        renderCarouselWithSlideIndex();
+        const img = screen.getByRole("img");
+        const previousButton = screen.getByTestId("previous-button");
+        const user = userEvent.setup();
+
+        await user.click(previousButton);
+
+        expect(img).toHaveAttribute("src", slides[1].imgUrl);
+        expect(onSlideIndexChange).toHaveBeenCalledWith(0);
+    });
+
+    it('should call onSlideIndexChange when next <button> is clicked', async () => {
+        renderCarouselWithSlideIndex();
+        const img = screen.getByRole("img");
+        const previousButton = screen.getByTestId("next-button");
+        const user = userEvent.setup();
+
+        await user.click(previousButton);
+
+        expect(img).toHaveAttribute("src", slides[1].imgUrl);
+        expect(onSlideIndexChange).toHaveBeenCalledWith(2);
     });
 });
