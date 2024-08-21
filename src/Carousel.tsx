@@ -1,6 +1,7 @@
 import CarouselSlide, {CarouselSlideProps} from "./CarouselSlide.tsx";
 import CarouselButton from "./CarouselButton.tsx";
-import {ReactNode, useState} from "react";
+import {ReactNode} from "react";
+import {useSlideIndex} from "./useSlideIndex.tsx";
 
 type Slide = {
     imgUrl?: string,
@@ -15,28 +16,15 @@ export type CarouselProps = {
 };
 
 const Carousel = ({slides, DefaultImgComponent, defaultImgHeight}: CarouselProps) => {
-    const [slideIndex, setSlideIndex] = useState(0);
+    const [slideIndex, decrementSlideIndex, incrementSlideIndex] = useSlideIndex(slides);
 
     return (
         <div data-testid={'carousel'}>
             <CarouselSlide ImgComponent={DefaultImgComponent} imgHeight={defaultImgHeight} {...slides?.[slideIndex]}/>
-            <CarouselButton data-testid={'previous-button'}
-                            onClick={() => {
-                                if (!slides) {
-                                    return;
-                                }
-                                setSlideIndex(prevState => (prevState + slides.length - 1) % slides.length);
-                            }}>
+            <CarouselButton data-testid={'previous-button'} onClick={decrementSlideIndex}>
                 Previous
             </CarouselButton>
-            <CarouselButton data-testid={'next-button'}
-                            onClick={() => {
-                                if (!slides) {
-                                    return;
-                                }
-                                setSlideIndex(prevState => (prevState + 1) % slides.length);
-                            }}
-            >
+            <CarouselButton data-testid={'next-button'} onClick={incrementSlideIndex}>
                 Next
             </CarouselButton>
         </div>
