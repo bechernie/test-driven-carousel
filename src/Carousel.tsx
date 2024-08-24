@@ -28,8 +28,6 @@ const Carousel = ({
                   }: CarouselProps) => {
     const [slideIndex, decrementSlideIndex, incrementSlideIndex] = useSlideIndex(slides, slideIndexProp, onSlideIndexChange, autoAdvanceInterval);
 
-    // This a lint staged test
-
     return (
         <div data-testid={'carousel'}>
             <CarouselSlide ImgComponent={DefaultImgComponent} imgHeight={defaultImgHeight} {...slides?.[slideIndex]}/>
